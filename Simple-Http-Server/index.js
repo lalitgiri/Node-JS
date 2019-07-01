@@ -19,7 +19,7 @@ const server = http.createServer((req, res) => {
         else fileUrl = req.url;
 
         var filePath = path.resolve('./public' + fileUrl);
-        const fileExt = '.html'
+        const fileExt = path.extname(fileUrl);
         if (fileExt == '.html') {
             fs.exists(filePath, (exists) => {
                 if (!exists) {
@@ -42,7 +42,7 @@ const server = http.createServer((req, res) => {
             res.end(`
                         <html>
                             <body>
-                                <h1> Error 404: ${fileUrl} not a HTML file found.
+                                <h1> Error 404: ${fileUrl} not a HTML file.
                             </body>
                         </html>
                     `);
