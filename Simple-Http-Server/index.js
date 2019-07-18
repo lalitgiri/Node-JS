@@ -3,7 +3,7 @@ var fs = require("fs");
 var path = require("path");
 
 const hostname = 'localhost';
-const port = 1234;
+const port = 3000;
 
 const server = http.createServer((req, res) => {
     console.log(`Request for ${req.url} by method ${req.method}`);
