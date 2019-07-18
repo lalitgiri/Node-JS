@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use('/dishes/',dishRouter);
-app.use('/dishes/',dishRouterWithId);
+
 
 app.use((req, res, next) => {
     res.status = 200;
