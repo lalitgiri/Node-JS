@@ -1,17 +1,11 @@
-const express = require('express');
+var bookController = (Book) => {
 
-const Book = require('../mongo-db-connection/mongo-db');
-
-
-var bookRouter = express.Router();
-
-bookRouter.route('/')
-    .post((req, res) => {
+    var post = (req, res) => {
         var book = new Book(req.body);
         book.save(book);
         res.send(book);
-    })
-    .get((req, res) => {
+    }
+    var get = (req, res) => {
         Book.find(req.query, (err, books) => {
             if (err) {
                 res.status(500).send(err);
@@ -19,28 +13,11 @@ bookRouter.route('/')
             else
                 res.status(200).json(books)
         });
-    })
-
-bookRouter.use('/:bookId', (req, res, next) => {
-    Book.findById(req.params.bookId, (err, book) => {
-        if (err) {
-            res.status(500).send(err);
-        }
-        else if (book) {
-            req.book = book;
-            next();
-        }
-        else {
-            res.status(404).send("Book Not Found");
-        }
-    });
-})
-
-bookRouter.route('/:bookId')
-    .get((req, res) => {
+    }
+    var getById = (req, res) => {
         res.json(req.book);
-    })
-    .put((req, res) => {
+    }
+    var put = (req, res) => {
         req.book.title = req.body.title;
         req.book.author = req.body.author;
         req.book.genre = req.body.genre;
@@ -55,8 +32,8 @@ bookRouter.route('/:bookId')
             }
         });
 
-    })
-    .patch((req, res) => {
+    }
+    var patch = (req, res) => {
         if (req.body._id)
             delete req.body._id;
         for (var key in req.body) {
@@ -70,8 +47,8 @@ bookRouter.route('/:bookId')
                 res.status(200).json(req.book);
             }
         });
-    })
-    .delete((req, res) => {
+    }
+    var remove = (req, res) => {
         req.book.remove((err) => {
             if (err)
                 res.status(500).send(err);
@@ -79,36 +56,32 @@ bookRouter.route('/:bookId')
                 res.status(200).send("Removed");
             }
         })
-    });
+    }
 
-module.exports = bookRouter;
+    var middleWare = (req, res, next) => {
+        Book.findById(req.params.bookId, (err, book) => {
+            if (err) {
+                res.status(500).send(err);
+            }
+            else if (book) {
+                req.book = book;
+                next();
+            }
+            else {
+                res.status(404).send("Book Not Found");
+            }
+        });
+    }
 
+    return {
+        post: post,
+        get: get,
+        getById: getById,
+        put: put,
+        patch: patch,
+        delete: remove,
+        middleWare: middleWare
+    }
+}
 
-
-// bookRouter.route('/Books')
-//     .get(async (req, res) => {
-
-//         // try {
-//         //     const newBook = new Book({ 'title': 'title1', 'author': 'author1', 'genre': 'genre1', 'read': true });
-//         //     await newBook.save()
-//         //         .then(resBook => {
-//         //             if (resBook) {
-//         //                 console.log('resBook', resBook)
-//         //             }
-//         //         })
-//         //         .catch(err => {
-//         //             console.log('error', err);
-//         //         });
-//         // } catch (error) {
-//         //     console.log('error2', error)
-//         // }
-
-
-//         Book.find((err, books) => {
-//             if (err) {
-//                 res.status(500).send(err);
-//             }
-//             else
-//                 res.status(200).json(books)
-//         });
-//     });
+module.exports = bookController;

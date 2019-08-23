@@ -1,5 +1,5 @@
 const express = require('express');
-const bookRouter = require('./controller/book-controller');
+const bookRouter = require('./routes/routes');
 
 
 const hostname = 'localhost';
