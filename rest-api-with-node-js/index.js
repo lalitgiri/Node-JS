@@ -8,7 +8,7 @@ const port = 3000;
 const app = express();
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
@@ -25,3 +25,5 @@ app.listen(port, hostname, () => {
 // server.listen(port, hostname, () => {
 //     console.log(`server running at http://${hostname}:${port}`);
 // });
+
+module.exports = app;
