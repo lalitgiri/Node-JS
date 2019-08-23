@@ -5,9 +5,8 @@ const Book = require('../mongo-db-connection/mongo-db');
 
 var bookRouter = express.Router();
 
-bookRouter.route('/Books')
+bookRouter.route('/')
     .post((req, res) => {
-        console.log(req.body);
         var book = new Book(req.body);
         book.save(book);
         res.send(book);
@@ -22,7 +21,7 @@ bookRouter.route('/Books')
         });
     })
 
-bookRouter.use('/Books/:bookId', (req, res, next) => {
+bookRouter.use('/:bookId', (req, res, next) => {
     Book.findById(req.params.bookId, (err, book) => {
         if (err) {
             res.status(500).send(err);
@@ -37,7 +36,7 @@ bookRouter.use('/Books/:bookId', (req, res, next) => {
     });
 })
 
-bookRouter.route('/Books/:bookId')
+bookRouter.route('/:bookId')
     .get((req, res) => {
         res.json(req.book);
     })
@@ -57,11 +56,11 @@ bookRouter.route('/Books/:bookId')
         });
 
     })
-    .patch((req, res) => {        
+    .patch((req, res) => {
         if (req.body._id)
-            delete req.body._id;       
+            delete req.body._id;
         for (var key in req.body) {
-            req.book[key] = req.body[key];          
+            req.book[key] = req.body[key];
         }
         req.book.save((err) => {
             if (err) {
@@ -70,7 +69,16 @@ bookRouter.route('/Books/:bookId')
             else {
                 res.status(200).json(req.book);
             }
-        });    
+        });
+    })
+    .delete((req, res) => {
+        req.book.remove((err) => {
+            if (err)
+                res.status(500).send(err);
+            else {
+                res.status(200).send("Removed");
+            }
+        })
     });
 
 module.exports = bookRouter;
