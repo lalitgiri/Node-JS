@@ -1,5 +1,21 @@
 var bookController = (Book) => {
 
+
+    var middleWare = (req, res, next) => {
+        Book.findById(req.params.bookId, (err, book) => {
+            if (err) {
+                res.status(500).send(err);
+            }
+            else if (book) {
+                req.book = book;
+                next();
+            }
+            else {
+                res.status(404).send("Book Not Found");
+            }
+        });
+    }
+
     var post = (req, res) => {
         var book = new Book(req.body);
 
@@ -66,20 +82,6 @@ var bookController = (Book) => {
         })
     }
 
-    var middleWare = (req, res, next) => {
-        Book.findById(req.params.bookId, (err, book) => {
-            if (err) {
-                res.status(500).send(err);
-            }
-            else if (book) {
-                req.book = book;
-                next();
-            }
-            else {
-                res.status(404).send("Book Not Found");
-            }
-        });
-    }
 
     return {
         post: post,
