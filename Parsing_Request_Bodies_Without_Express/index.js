@@ -18,23 +18,24 @@ const server = http.createServer((req, res) => {
         res.write('</html>');
 
         return res.end();
-    }
-    if (url === '/message' && method === 'POST') {
+    } else if (url === '/message' && method === 'POST') {
         const body = [];
         req.on('data', chunk => {
             body.push(chunk);
         });
         req.on('end', () => {
             const data = Buffer.concat(body).toString().split("=")[1];
-            fs.writeFileSync('message.text',data);
+            fs.writeFileSync('message.text', data);
+            res.statusCode = 302; // redirection code
+            res.setHeader('Location', '/'); // redirection header
+            return res.end();
         })
+    } else {
         res.statusCode = 302; // redirection code
         res.setHeader('Location', '/'); // redirection header
         return res.end();
-
     }
-    res.write("hello");
-    res.end();
+
 });
 
 server.listen(3000);
