@@ -1,0 +1,19 @@
+{
+  "name": "parsing-request-bodies",
+  "version": "1.0.0",
+  "description": "parsing request bodies in node js using 'http' server module insted of 'Express'",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lalitgiri/Node-JS.git"
+  },
+  "author": "Lalit Giri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lalitgiri/Node-JS/issues"
+  },
+  "homepage": "https://github.com/lalitgiri/Node-JS#readme"
+}
